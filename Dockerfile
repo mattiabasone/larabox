@@ -5,11 +5,12 @@ LABEL \
 	image="mattiabasone/larabox"
 
 ARG HOST_USER_UID=1000
+ARG PHP_VERSION=7.4
+ARG ENV="prod"
 
 ENV DEBIAN_FRONTEND="noninteractive" \
     ENV="prod" \
     TZ="UTC" \
-	PHP_VERSION=7.4 \
 	PHP_PM_MAX_CHILDREN=8
 
 RUN apt-get update && \
@@ -30,7 +31,7 @@ COPY files/cron/app /etc/cron.d/app
 COPY startup.sh /startup.sh
 
 # Installing selected php version and development software kit
-RUN /bin/php-install.sh ${PHP_VERSION} ${TAG_ENV}
+RUN /bin/php-install.sh ${PHP_VERSION} ${ENV}
 
 # PHP configuration
 # Create a symlink for php-fpm executable and removing www fpm pools

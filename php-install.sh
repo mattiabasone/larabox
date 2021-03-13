@@ -13,7 +13,7 @@ case ${PHP_VERSION} in
                 php7.3-mbstring php7.3-mysql php7.3-mysqli php7.3-mysqlnd \
                 php7.3-PDO php7.3-posix php7.3-readline php7.3-shmop \
                 php7.3-SimpleXML php7.3-sockets php7.3-sysvmsg php7.3-sysvsem php7.3-sysvshm \
-                php7.3-tokenizer php7.3-wddx php7.3-xml php7.3-xmlreader php7.3-xmlwriter \
+                php7.3-tokenizer php7.3-xml php7.3-xmlreader php7.3-xmlwriter \
                 php7.3-xsl php7.3-opcache php7.3-zip php7.3-fpm php7.3-bcmath php7.3-imap
         ;;
     7.4)
@@ -35,7 +35,7 @@ esac
 apt-get install --no-install-recommends -y php-memcached php-redis php-imagick php-mongo
 
 
-if [ "${ENV}" == 'local' ]; then
+if [ "${ENV}" == 'dev' ]; then
     # Installing composer
     curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php
     php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer

@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  larabox-7.4:
+    image: mattiabasone/larabox:7.4
+    build:
+      context: '.'
+      args:
+        - PHP_VERSION=7.4
+        - ENV=prod
+    ports:
+      - "80:80"

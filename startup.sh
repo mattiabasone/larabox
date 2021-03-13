@@ -13,7 +13,7 @@ fi
 
 # Override host user uid by env
 if [ "$HOST_USER_UID" != "" ] || [ $HOST_USER_UID != 1000 ]; then
-    usermod -u $HOST_USER_UID sindria && groupmod sindria -g $HOST_USER_UID
+    usermod -u $HOST_USER_UID app && groupmod app -g $HOST_USER_UID
 fi
 
 /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
