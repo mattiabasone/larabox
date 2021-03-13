@@ -31,11 +31,13 @@ COPY files/cron/app /etc/cron.d/app
 COPY startup.sh /startup.sh
 
 # Installing selected php version and development software kit
-RUN /bin/php-install.sh ${PHP_VERSION} ${ENV}
+RUN chown root:root /etc/cron.d/app && \
+    chmod 644 /etc/cron.d/app
 
 # PHP configuration
 # Create a symlink for php-fpm executable and removing www fpm pools
-RUN ln -s /usr/sbin/php-fpm${PHP_VERSION} /usr/sbin/php-fpm && \
+RUN /bin/php-install.sh ${PHP_VERSION} ${ENV} && \
+    ln -s /usr/sbin/php-fpm${PHP_VERSION} /usr/sbin/php-fpm && \
     mkdir /run/php/ && \
     chown app:root /run/php/ && \
     rm /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
