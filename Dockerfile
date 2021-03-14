@@ -40,7 +40,7 @@ RUN /bin/php-install.sh ${PHP_VERSION} ${ENV} && \
     ln -s /usr/sbin/php-fpm${PHP_VERSION} /usr/sbin/php-fpm && \
     mkdir /run/php/ && \
     chown app:root /run/php/ && \
-    rm /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
+    rm -f /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
 COPY files/fpm/app.conf /etc/php/${PHP_VERSION}/fpm/pool.d/app.conf
 
 # Setting up volume
