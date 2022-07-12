@@ -70,6 +70,15 @@ case ${PHP_VERSION} in
                 php8.0-tokenizer php8.0-xml php8.0-xmlreader php8.0-xmlwriter \
                 php8.0-xsl php8.0-opcache php8.0-zip php8.0-fpm php8.0-bcmath php8.0-imap
         ;;
+    8.1)
+        apt-get install -y --no-install-recommends php8.1 php8.1-calendar php8.1-ctype php8.1-curl php8.1-dom \
+                php8.1-exif php8.1-fileinfo php8.1-ftp php8.1-gd php8.1-gettext php8.1-iconv php8.1-intl php8.1-json \
+                php8.1-mbstring php8.1-mysql php8.1-mysqli php8.1-mysqlnd \
+                php8.1-PDO php8.1-posix php8.1-readline php8.1-shmop \
+                php8.1-SimpleXML php8.1-sockets php8.1-sysvmsg php8.1-sysvsem php8.1-sysvshm \
+                php8.1-tokenizer php8.1-xml php8.1-xmlreader php8.1-xmlwriter \
+                php8.1-xsl php8.1-opcache php8.1-zip php8.1-fpm php8.1-bcmath php8.1-imap
+        ;;
     *)
         echo "Invalid PHP version specified"
         exit 1
