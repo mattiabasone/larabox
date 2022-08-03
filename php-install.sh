@@ -62,21 +62,13 @@ case ${PHP_VERSION} in
                 php7.4-xsl php7.4-opcache php7.4-zip php7.4-fpm php7.4-bcmath php7.4-imap
         ;;
     8.0)
-        apt-get install -y --no-install-recommends php8.0 php8.0-calendar php8.0-ctype php8.0-curl php8.0-dom \
-                php8.0-exif php8.0-fileinfo php8.0-ftp php8.0-gd php8.0-gettext php8.0-iconv php8.0-intl php8.0-json \
-                php8.0-mbstring php8.0-mysql php8.0-mysqli php8.0-mysqlnd \
-                php8.0-PDO php8.0-posix php8.0-readline php8.0-shmop \
-                php8.0-SimpleXML php8.0-sockets php8.0-sysvmsg php8.0-sysvsem php8.0-sysvshm \
-                php8.0-tokenizer php8.0-xml php8.0-xmlreader php8.0-xmlwriter \
+        apt-get install -y --no-install-recommends php8.0 php8.0-common php8.0-curl \
+                php8.0-gd php8.0-intl php8.0-mbstring php8.0-mysql php8.0-readline php8.0-xml \
                 php8.0-xsl php8.0-opcache php8.0-zip php8.0-fpm php8.0-bcmath php8.0-imap
         ;;
     8.1)
-        apt-get install -y --no-install-recommends php8.1 php8.1-calendar php8.1-ctype php8.1-curl php8.1-dom \
-                php8.1-exif php8.1-fileinfo php8.1-ftp php8.1-gd php8.1-gettext php8.1-iconv php8.1-intl php8.1-json \
-                php8.1-mbstring php8.1-mysql php8.1-mysqli php8.1-mysqlnd \
-                php8.1-PDO php8.1-posix php8.1-readline php8.1-shmop \
-                php8.1-SimpleXML php8.1-sockets php8.1-sysvmsg php8.1-sysvsem php8.1-sysvshm \
-                php8.1-tokenizer php8.1-xml php8.1-xmlreader php8.1-xmlwriter \
+        apt-get install -y --no-install-recommends php8.1 php8.1-common php8.1-curl \
+                php8.1-gd php8.1-intl php8.1-mbstring php8.1-mysql php8.1-readline php8.1-xml \
                 php8.1-xsl php8.1-opcache php8.1-zip php8.1-fpm php8.1-bcmath php8.1-imap
         ;;
     *)
