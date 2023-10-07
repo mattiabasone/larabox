@@ -36,11 +36,14 @@ RUN chown root:root /etc/cron.d/app && \
 
 # PHP configuration
 # Create a symlink for php-fpm executable and removing www fpm pools
-RUN /bin/php-install.sh ${PHP_VERSION} ${ENV} && \
+RUN chmod +x /startup.sh && \
+    chmod +x /bin/php-install.sh && \
+    /bin/php-install.sh ${PHP_VERSION} ${ENV} && \
     ln -s /usr/sbin/php-fpm${PHP_VERSION} /usr/sbin/php-fpm && \
     mkdir /run/php/ && \
     chown app:root /run/php/ && \
-    rm -f /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
+    rm -f /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf && \
+    update-alternatives --set php /usr/bin/php${PHP_VERSION}
 COPY files/fpm/app.conf /etc/php/${PHP_VERSION}/fpm/pool.d/app.conf
 
 # Setting up volume
