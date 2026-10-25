@@ -1,54 +1,52 @@
-FROM ubuntu:20.04
+FROM ubuntu:26.04
 
 LABEL \
 	name="mattiabasone/larabox" \
 	image="mattiabasone/larabox"
 
-ARG HOST_USER_UID=1000
-ARG PHP_VERSION=7.4
-ARG ENV="prod"
+ARG PHP_VERSION=8.5
 
 ENV DEBIAN_FRONTEND="noninteractive" \
-    ENV="prod" \
     TZ="UTC" \
-	PHP_PM_MAX_CHILDREN=8
+	PHP_PM_MAX_CHILDREN=8 \
+	HOST_USER_UID=1000
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends aptitude apt-utils software-properties-common && \
-    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
-    add-apt-repository -y ppa:nginx/stable && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends gpg-agent ssmtp curl vim unzip supervisor nginx cron iproute2 && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends apt-utils lsb-release ca-certificates ssmtp curl unzip supervisor nginx cron iproute2 \
+    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
+    && rm -rf /var/lib/apt/lists/* \
+    && curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb \
+    && dpkg -i /tmp/debsuryorg-archive-keyring.deb \
+    && sh -c 'echo "deb [signed-by=/usr/share/keyrings/debsuryorg-archive-keyring.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list'
 
-RUN useradd app -u ${HOST_USER_UID} -d /home/app -s /bin/bash && \
-    groupmod app -g ${HOST_USER_UID}
+# PHP installation and configuration
+# Create a symlink for php-fpm executable and removing www fpm pools
+RUN set -eux; \
+    apt-get update; \
+    EXTRA=""; \
+    case "${PHP_VERSION}" in 8.0|8.1|8.2|8.3|8.4) EXTRA="php${PHP_VERSION}-opcache";; esac; \
+    apt-get install -y --no-install-recommends \
+        php${PHP_VERSION} php${PHP_VERSION}-common php${PHP_VERSION}-curl \
+        php${PHP_VERSION}-gd php${PHP_VERSION}-intl php${PHP_VERSION}-mbstring \
+        php${PHP_VERSION}-mysql php${PHP_VERSION}-readline php${PHP_VERSION}-xml \
+        php${PHP_VERSION}-xsl php${PHP_VERSION}-zip \
+        php${PHP_VERSION}-fpm php${PHP_VERSION}-bcmath ${EXTRA} \
+        php${PHP_VERSION}-memcached php${PHP_VERSION}-redis php${PHP_VERSION}-imagick; \
+    rm -rf /var/lib/apt/lists/*; \
+    ln -s /usr/sbin/php-fpm${PHP_VERSION} /usr/sbin/php-fpm; \
+    chown ubuntu:root /run/php/; \
+    rm -f /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
 
-COPY php-install.sh /bin/php-install.sh
+COPY --chmod=755 --from=composer:2.10.3 /usr/bin/composer /usr/local/bin/composer
 COPY files/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY files/supervisor/app.conf /etc/supervisor/conf.d/
-COPY files/cron/app /etc/cron.d/app
-COPY startup.sh /startup.sh
-
-# Installing selected php version and development software kit
-RUN chown root:root /etc/cron.d/app && \
-    chmod 644 /etc/cron.d/app
-
-# PHP configuration
-# Create a symlink for php-fpm executable and removing www fpm pools
-RUN chmod +x /startup.sh && \
-    chmod +x /bin/php-install.sh && \
-    /bin/php-install.sh ${PHP_VERSION} ${ENV} && \
-    ln -s /usr/sbin/php-fpm${PHP_VERSION} /usr/sbin/php-fpm && \
-    mkdir /run/php/ && \
-    chown app:root /run/php/ && \
-    rm -f /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf && \
-    update-alternatives --set php /usr/bin/php${PHP_VERSION}
+COPY --chmod=644 files/cron/app /etc/cron.d/app
+COPY --chmod=755 startup.sh /startup.sh
 COPY files/fpm/app.conf /etc/php/${PHP_VERSION}/fpm/pool.d/app.conf
 
 # Setting up volume
-RUN mkdir -p /code && \
-    chown -R app:app /code
+RUN mkdir -p /code \
+    && chown -R ubuntu:ubuntu /code
 
 WORKDIR /code
 

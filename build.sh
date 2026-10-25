@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-for PHP_VERSION in 7.4 8.0 8.1 8.2
+set -e
+
+for PHP_VERSION in 8.0 8.1 8.2 8.3 8.4 8.5;
 do
 	docker build . -f Dockerfile \
   --build-arg PHP_VERSION=${PHP_VERSION} \

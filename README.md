@@ -3,11 +3,9 @@
 Docker image for Laravel
 
 ```yaml
-version: "3.9"
-
 services:
   backend:
-    image: mattiabasone/larabox:7.4
+    image: mattiabasone/larabox:8.5
     volumes:
      - ./code:/code
 ```
